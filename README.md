@@ -25,52 +25,52 @@ How to use?
 Digdin uses html attributtes to configure the ui interaction, example:
 
 
-    <a href="#" data-fmk-click="" data-fmk-callback="alert('hello world')">Hello World</a>
+    <a href="#" data-dgd-click="" data-dgd-callback="alert('hello world')">Hello World</a>
 
 Which attributtes do we have?
 =============================
-###fmk-{event}={event}
-To trigger an event like click or change, etc. You also can call *[data-fmk-click=click]*, this will trigger de event when DOM load is complete.
+###dgd-{event}={event}
+To trigger an event like click or change, etc. You also can call *[data-dgd-click=click]*, this will trigger de event when DOM load is complete.
 
-###fmk-action={action}
+###dgd-action={action}
 The actions you want to execute [see action list](#)
 
-###fmk-condition={function}
+###dgd-condition={function}
 The condition that must be true to execute de action.
 Usage:
     
-    <a href="#" data-fmk-click="" 
-                data-fmk-condition="isThisTheRealLife" 
-                data-fmk-callback="alert('hello world')">
+    <a href="#" data-dgd-click="" 
+                data-dgd-condition="isThisTheRealLife" 
+                data-dgd-callback="alert('hello world')">
       Hello World
     </a>
     
 
-###fmk-condition-callback={function}
+###dgd-condition-callback={function}
 The callback for condition, it's triggered when condition isn't true.
 
 
-###fmk-schedule={milliseconds}
+###dgd-schedule={milliseconds}
 Schedule the action.
 Usage:
 
 
-    <a href="#" data-fmk-click="" 
-                data-fmk-schedule="3000" 
-                data-fmk-callback="alert('Hmmm, i'm scheduled!')">
+    <a href="#" data-dgd-click="" 
+                data-dgd-schedule="3000" 
+                data-dgd-callback="alert('Hmmm, i'm scheduled!')">
       Hello World
     </a>
     
-###fmk-ajax-callback={function}
+###dgd-ajax-callback={function}
 Callback for actions that execute ajax operations
 
-###fmk-target={DOM element identifier}
+###dgd-target={DOM element identifier}
 The target DOM element that will be used in actions
 
-###fmk-source={DOM element identifier|URL|Form|Select}
+###dgd-source={DOM element identifier|URL|Form|Select}
 The source for actions.
 
-###fmk-template={Template script tag}
+###dgd-template={Template script tag}
 Template for action executing, very simillar to handlebars.js.
 Usage:
     
@@ -81,6 +81,6 @@ Usage:
         {{(new Date()).getMinutes}}
     </script>
     
-###fmk-confirm={confirm dialog text}
+###dgd-confirm={confirm dialog text}
 Confirm's the action
 
