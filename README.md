@@ -9,7 +9,7 @@ digdin.js is based on knockout.js and angular.js it's a simplified framework tha
 Examples
 ========
 
-- (Example 1)[http://gypsolutions.com.br/digdin/examples/]
+- [Example 1](http://gypsolutions.com.br/digdin/examples/)
 
 Why use digdin.js?
 ==================
