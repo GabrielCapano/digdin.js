@@ -33,7 +33,8 @@ var digdin = window.digdin = {
     eventHandle: function (e) {
         var data = $(this).data();
         var doNotAction = false;
-
+        
+        //on key press of a certain key
         if (data.dgdKeypress != undefined && data.dgdKeypress != '' && e.keyCode != data.dgdKeypress) {
             doNotAction = true;
         }
@@ -82,6 +83,8 @@ var digdin = window.digdin = {
     },
     
     actions: {
+        
+        //Add a new editor (from .net MVC 4) to a list of editor, this is reaaallly utile!
         addEditor: function(obj) {
             var data = $(obj).data();
             var target = $(data.dgdTarget);
@@ -106,12 +109,15 @@ var digdin = window.digdin = {
             digdin.loadMask(toAppend);
         },
         
+        
+        //click event on target deprecated, will be remove soon as possible
         click: function (obj) {
             var data = $(obj).data();
             var target = $(data.dgdTarget);
             target.click();
         },
-
+        
+        //Making a simple ajax call, utile for delete buttons
         ajaxCall:function(obj) {
 
             var data = $(obj).data();
@@ -143,6 +149,8 @@ var digdin = window.digdin = {
             });
         },
         
+        
+        //Copuing form values to another form (using [data-dgd-name] as reference)
         copyFormValues: function (obj) {
             var data = $(obj).data();
             var target = $(data.dgdTarget);
@@ -154,12 +162,16 @@ var digdin = window.digdin = {
             });
         },
 
+
+        // ...
         toggle: function (obj) {
             var data = $(obj).data();
             var target = $(data.dgdTarget);
             target.toggle();
         },
-
+        
+        
+        // appending a item to a DOM element1
         append: function (obj) {
             var data = $(obj).data();
             var target = $(data.dgdTarget);
@@ -173,12 +185,16 @@ var digdin = window.digdin = {
             else
                 target.append(digdin.proccessTemplate(template));
         },
-
+        
+        
+        // no need of explanation, right?
         removeClosest: function (obj) {
             var data = $(obj).data();
             $(obj).closest(data.dgdTarget).remove();
         },
-
+        
+        
+        //Sending ajax form
         parentFormSubmitAjax: function (obj) {
             if (!digdin.formAjaxExecuting) {
                 digdin.formAjaxExecuting = true;
@@ -201,7 +217,9 @@ var digdin = window.digdin = {
                 });
             }
         },
-
+        
+        
+        // get data from an ajax an populate a select (example)
         fill: function (obj) {
             var data = obj.data();
             var target = $(data.dgdTarget);
@@ -247,7 +265,8 @@ var digdin = window.digdin = {
             });
         }
     },
-
+    
+    
     loadCheckToggle: function() {
         $('[data-dgd-check-toggle]').each(function() {
             var data = $(this).data();
@@ -260,7 +279,9 @@ var digdin = window.digdin = {
             });
         });
     },
-
+    
+    
+    //todo: make it globalized
     loadDateRegion: function () {
         $.datepicker.regional['pt-BR'] = {
             closeText: 'Fechar',
@@ -311,7 +332,8 @@ var digdin = window.digdin = {
             });
         }
     },
-
+    
+    //Still need some work
     callMessage: function (message, status, callback, data, obj) {
         $.blockUI({ message: '<div style="background:' + (status ? "#1d943b" : "#bb2413") + ';color:white;padding:15px;line-height:20px;"><h4>' + message + '</h4></div>', css: { border: 'none' } });
         setTimeout(function () {
@@ -323,7 +345,7 @@ var digdin = window.digdin = {
         }, 1000);
     },
 
-
+    //You can/should override this in your application! =)
     ajaxSetup: function () {
         setTimeout(function () {
             $(document).ajaxStart(function (a) {
@@ -346,10 +368,12 @@ var digdin = window.digdin = {
     },
 
     addAction: function(name, func) {
+        //Simply adding an action to action list
         digdin.actions[name] = func;
     },
 
     proccessTemplate: function(template){
+        // A hack to template always be a string type
         var keysJs = (template + '').match(/{{[\s\S]*}}/gi);
 
 
@@ -403,17 +427,17 @@ var digdin = window.digdin = {
 
     verifyDependencies: function () {
 
-        if (jQuery == undefined) {
+        if (!jQuery) {
             console.error('jQuery library is not loaded, please include it in file or check for file\'s order');
             return false;
         }
 
-        if ($.datepicker == undefined) {
+        if (!$.datepicker) {
             console.error('jQuery UI datepicker library is not loaded, please include it in file or check for file\'s order');
             return false;
         }
 
-        if ($.mask == undefined) {
+        if (!$.mask) {
             console.error('jQuery MaskedInput plugin is not loaded, please include it in file or check for file\'s order');
             return false;
         }
