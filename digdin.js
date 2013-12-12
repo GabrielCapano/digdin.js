@@ -1,29 +1,31 @@
-var framework = window.framework = {
+var digdin = window.digdin = {
     formAjaxExecuting: false,
 
 
     init: function () {
-        if (framework.verifyDependencies()) {
-            framework.loadDateRegion();
-            framework.loadDatepicker();
-            framework.loadCheckToggle();
-            framework.loadMaskMoney();
-            framework.loadClear();
-            framework.loadMask();
-            framework.ajaxSetup();
-            framework.loadEvents();
+        if (digdin.verifyDependencies()) {
+            digdin.loadDateRegion();
+            digdin.loadDatepicker();
+            digdin.loadCheckToggle();
+            digdin.loadMaskMoney();
+            digdin.loadClear();
+            digdin.loadMask();
+            digdin.ajaxSetup();
+            digdin.loadEvents();
         }
     },
     loadEvents: function () {
-        $(document).on('change', '[data-fmk-change]', framework.eventHandle);
-        $(document).on('click', '[data-fmk-click]', framework.eventHandle);
-        $(document).on('keydown', '[data-fmk-keydown]', framework.eventHandle);
-        $(document).on('keypress', '[data-fmk-keypress]', framework.eventHandle);
-        $(document).on('keyup', '[data-fmk-keyup]', framework.eventHandle);
+        $(document).on('change', '[data-dgd-change]', digdin.eventHandle);
+        $(document).on('click', '[data-dgd-click]', digdin.eventHandle);
+        $(document).on('keydown', '[data-dgd-keydown]', digdin.eventHandle);
+        $(document).on('keypress', '[data-dgd-keypress]', digdin.eventHandle);
+        $(document).on('keyup', '[data-dgd-keyup]', digdin.eventHandle);
         
-        $('[data-fmk-change=change]').change();
-        $('[data-fmk-click=click]').click();
-        $('[data-fmk-keydown=keydown]').keydown();
+        $('[data-dgd-change=change]').change();
+        $('[data-dgd-click=click]').click();
+        $('[data-dgd-keydown=keydown]').keydown();
+        $('[data-dgd-keypress=keypress]').keypress();
+        $('[data-dgd-keyup=keyup]').keyup();
     },
 
 
@@ -32,49 +34,49 @@ var framework = window.framework = {
         var data = $(this).data();
         var doNotAction = false;
 
-        if (data.fmkKeypress != undefined && data.fmkKeypress != '' && e.keyCode != data.fmkKeypress) {
+        if (data.dgdKeypress != undefined && data.dgdKeypress != '' && e.keyCode != data.dgdKeypress) {
             doNotAction = true;
         }
         
         if (!doNotAction) {
-            if (data.fmkCondition != undefined) {
-                if (!eval(data.fmkCondition)) {
+            if (data.dgdCondition != undefined) {
+                if (!eval(data.dgdCondition)) {
                     e.preventDefault();
-                    eval(data.fmkConditionCallback);
+                    eval(data.dgdConditionCallback);
                     return false;
                 }
             }
 
 
-            if (data.fmkAction == "parentFormSubmitAjax" || data.fmkPreventDefault != undefined)
+            if (data.dgdAction == "parentFormSubmitAjax" || data.dgdPreventDefault != undefined)
                 e.preventDefault();
 
             var canGo = true;
 
-            if (data.fmkConfirm != undefined && data.fmkConfirm != '')
-                canGo = confirm(data.fmkConfirm);
+            if (data.dgdConfirm != undefined && data.dgdConfirm != '')
+                canGo = confirm(data.dgdConfirm);
 
             if (canGo) {
-                if (!data.fmkSchedule)
-                    framework.actions[data.fmkAction]($(this));
+                if (!data.dgdSchedule)
+                    digdin.actions[data.dgdAction]($(this));
                 else {
-                    clearTimeout($(this).attr('data-fmk-timeout-id'));
+                    clearTimeout($(this).attr('data-dgd-timeout-id'));
                     var obj = $(this);
                     var time = setTimeout(function () {
-                        framework.actions[data.fmkAction](obj);
-                        if (data.fmkCallback != undefined && data.fmkCallback != '') {
-                            eval(data.fmkCallback);
+                        digdin.actions[data.dgdAction](obj);
+                        if (data.dgdCallback != undefined && data.dgdCallback != '') {
+                            eval(data.dgdCallback);
                         }
-                    }, data.fmkSchedule);
-                    $(this).attr('data-fmk-timeout-id', time);
+                    }, data.dgdSchedule);
+                    $(this).attr('data-dgd-timeout-id', time);
                 }
             }
 
 
 
 
-            if (!data.fmkSchedule && data.fmkCallback != undefined && data.fmkCallback != '') {
-                eval(data.fmkCallback);
+            if (!data.dgdSchedule && data.dgdCallback != undefined && data.dgdCallback != '') {
+                eval(data.dgdCallback);
             }
         }
     },
@@ -82,31 +84,31 @@ var framework = window.framework = {
     actions: {
         addEditor: function(obj) {
             var data = $(obj).data();
-            var target = $(data.fmkTarget);
-            var source = $(data.fmkSource);
-            var template = $(data.fmkTemplate);
-            var count = $(data.fmkEditorParent, target).length;
+            var target = $(data.dgdTarget);
+            var source = $(data.dgdSource);
+            var template = $(data.dgdTemplate);
+            var count = $(data.dgdEditorParent, target).length;
 
             var objData = {};
             objData["count"] = count;
 
-            source.find('[data-fmk-name]').each(function() {
-                objData[$(this).attr('data-fmk-name')] = $(this).val();
+            source.find('[data-dgd-name]').each(function() {
+                objData[$(this).attr('data-dgd-name')] = $(this).val();
             });
 
-            var toAppend = $(framework.addValueToTemplate(objData, template.html()));
+            var toAppend = $(digdin.addValueToTemplate(objData, template.html()));
             
             target.append(toAppend);
             
-            framework.loadDatepicker(toAppend);
-            framework.loadMaskMoney(toAppend);
-            framework.loadClear(toAppend);
-            framework.loadMask(toAppend);
+            digdin.loadDatepicker(toAppend);
+            digdin.loadMaskMoney(toAppend);
+            digdin.loadClear(toAppend);
+            digdin.loadMask(toAppend);
         },
         
         click: function (obj) {
             var data = $(obj).data();
-            var target = $(data.fmkTarget);
+            var target = $(data.dgdTarget);
             target.click();
         },
 
@@ -114,8 +116,8 @@ var framework = window.framework = {
 
             var data = $(obj).data();
             var ajaxData = {};
-            if (data.fmkSourceData != null && data.fmkSourceData != undefined) {
-                var func = eval(data.fmkSourceData);
+            if (data.dgdSourceData != null && data.dgdSourceData != undefined) {
+                var func = eval(data.dgdSourceData);
                 if (typeof func == "function") {
                     ajaxData = func(obj);
                 }
@@ -124,7 +126,7 @@ var framework = window.framework = {
             }
 
             $.ajax({
-                url: data.fmkSource,
+                url: data.dgdSource,
                 type: 'POST',
                 data: ajaxData,
                 dataType: 'json',
@@ -132,54 +134,54 @@ var framework = window.framework = {
                     
                 },
                 success: function (resp) {
-                    if (data.fmkAlertCondition != undefined && data.fmkAlertCondition != '') {
-                        if (eval(data.fmkAlertCondition))
-                            framework.callMessage(resp.Messages.join('</br>'), resp.Status, data.fmkAjaxCallback, resp, obj);
+                    if (data.dgdAlertCondition != undefined && data.dgdAlertCondition != '') {
+                        if (eval(data.dgdAlertCondition))
+                            digdin.callMessage(resp.Messages.join('</br>'), resp.Status, data.dgdAjaxCallback, resp, obj);
                     } else
-                        framework.callMessage(resp.Messages.join('</br>'), resp.Status, data.fmkAjaxCallback, resp, obj);
+                        digdin.callMessage(resp.Messages.join('</br>'), resp.Status, data.dgdAjaxCallback, resp, obj);
                 }
             });
         },
         
         copyFormValues: function (obj) {
             var data = $(obj).data();
-            var target = $(data.fmkTarget);
-            var source = $(data.fmkSource);
+            var target = $(data.dgdTarget);
+            var source = $(data.dgdSource);
 
-            var sFields = source.find('[data-fmk-name]');
+            var sFields = source.find('[data-dgd-name]');
             sFields.each(function () {
-                $('[data-fmk-name=' + $(this).attr('data-fmk-name') + ']', target).val($(this).val()).change();
+                $('[data-dgd-name=' + $(this).attr('data-dgd-name') + ']', target).val($(this).val()).change();
             });
         },
 
         toggle: function (obj) {
             var data = $(obj).data();
-            var target = $(data.fmkTarget);
+            var target = $(data.dgdTarget);
             target.toggle();
         },
 
         append: function (obj) {
             var data = $(obj).data();
-            var target = $(data.fmkTarget);
-            var template = $(data.fmkTemplate).html();
-            if (data.fmkSource != '' && data.fmkSource != undefined) {
-                if (data.fmkSourceType == 'form') {
-                    var obj = framework.getJson($(data.fmkSource));
-                    target.append(framework.addValueToTemplate(obj, template));
+            var target = $(data.dgdTarget);
+            var template = $(data.dgdTemplate).html();
+            if (data.dgdSource != '' && data.dgdSource != undefined) {
+                if (data.dgdSourceType == 'form') {
+                    var obj = digdin.getJson($(data.dgdSource));
+                    target.append(digdin.addValueToTemplate(obj, template));
                 }
             }
             else
-                target.append(template);
+                target.append(digdin.proccessTemplate(template));
         },
 
         removeClosest: function (obj) {
             var data = $(obj).data();
-            $(obj).closest(data.fmkTarget).remove();
+            $(obj).closest(data.dgdTarget).remove();
         },
 
         parentFormSubmitAjax: function (obj) {
-            if (!framework.formAjaxExecuting) {
-                framework.formAjaxExecuting = true;
+            if (!digdin.formAjaxExecuting) {
+                digdin.formAjaxExecuting = true;
                 var data = $(obj).data();
                 var form = $(obj).closest('form');
                 $.ajax({
@@ -187,14 +189,14 @@ var framework = window.framework = {
                     type: form.attr('method'),
                     data: form.serialize(),
                     complete: function () {
-                        framework.formAjaxExecuting = false;
+                        digdin.formAjaxExecuting = false;
                     },
                     success: function (resp) {
-                        if (data.fmkAlertCondition != undefined && data.fmkAlertCondition != '') {
-                            if (eval(data.fmkAlertCondition))
-                                framework.callMessage(resp.Messages.join('</br>'), resp.Status, data.fmkAjaxCallback, resp, obj);
+                        if (data.dgdAlertCondition != undefined && data.dgdAlertCondition != '') {
+                            if (eval(data.dgdAlertCondition))
+                                digdin.callMessage(resp.Messages.join('</br>'), resp.Status, data.dgdAjaxCallback, resp, obj);
                         } else
-                            framework.callMessage(resp.Messages.join('</br>'), resp.Status, data.fmkAjaxCallback, resp, obj);
+                            digdin.callMessage(resp.Messages.join('</br>'), resp.Status, data.dgdAjaxCallback, resp, obj);
                     }
                 });
             }
@@ -202,12 +204,12 @@ var framework = window.framework = {
 
         fill: function (obj) {
             var data = obj.data();
-            var target = $(data.fmkTarget);
-            var template = $(data.fmkTemplate).html();
+            var target = $(data.dgdTarget);
+            var template = $(data.dgdTemplate).html();
             target.html('');
-            if (data.fmkUrl != undefined || data.fmkSource != undefined) {
+            if (data.dgdUrl != undefined || data.dgdSource != undefined) {
                 $.ajax({
-                    url: data.fmkUrl != undefined ? data.fmkUrl : data.fmkSource,
+                    url: data.dgdUrl != undefined ? data.dgdUrl : data.dgdSource,
                     type: 'post',
                     dataType: 'json',
                     data: {
@@ -215,10 +217,10 @@ var framework = window.framework = {
                     },
                     success: function (resp) {
                         for (var r in resp) {
-                            target.append(framework.addValueToTemplate(resp[r], template));
+                            target.append(digdin.addValueToTemplate(resp[r], template));
                         }
-                        if (data.fmkAjaxCallback != undefined && data.fmkAjaxCallback != '') {
-                            var func = eval(data.fmkAjaxCallback);
+                        if (data.dgdAjaxCallback != undefined && data.dgdAjaxCallback != '') {
+                            var func = eval(data.dgdAjaxCallback);
                             func(resp);
                         }
                     }
@@ -231,14 +233,14 @@ var framework = window.framework = {
     loadMaskMoney: function (obj) {
         if (obj != undefined) {
 
-            $('[data-fmk-currency]', obj).maskMoney({
+            $('[data-dgd-currency]', obj).maskMoney({
                 symbol: 'R$ ',
                 thousands: '.',
                 decimal: ','
             });
         } else {
 
-            $('[data-fmk-currency]').maskMoney({
+            $('[data-dgd-currency]').maskMoney({
                 symbol: 'R$ ',
                 thousands: '.',
                 decimal: ','
@@ -247,13 +249,13 @@ var framework = window.framework = {
     },
 
     loadCheckToggle: function() {
-        $('[data-fmk-check-toggle]').each(function() {
+        $('[data-dgd-check-toggle]').each(function() {
             var data = $(this).data();
             $(this).toggleButtons({
                 width: 60,
                 label: {
-                    enabled: data.fmkCheckOn,
-                    disabled: data.fmkCheckOff
+                    enabled: data.dgdCheckOn,
+                    disabled: data.dgdCheckOff
                 }
             });
         });
@@ -284,15 +286,15 @@ var framework = window.framework = {
 
     loadDatepicker: function (obj) {
         if (obj != undefined) {
-            $('[data-fmk-datepicker]', obj).datepicker();
+            $('[data-dgd-datepicker]', obj).datepicker();
         } else {
-            $('[data-fmk-datepicker]').datepicker();
+            $('[data-dgd-datepicker]').datepicker();
         }
     },
 
     loadClear: function () {
-        $('[data-fmk-clear]').each(function() {
-            var clear = $(this).attr('data-fmk-clear');
+        $('[data-dgd-clear]').each(function() {
+            var clear = $(this).attr('data-dgd-clear');
             if ($(this).val() == clear || clear == '')
                 $(this).val('');
         });
@@ -300,12 +302,12 @@ var framework = window.framework = {
 
     loadMask: function (obj) {
         if (obj != undefined) {
-            $('[data-fmk-mask]', obj).each(function () {
-                $(this).mask($(this).attr('data-fmk-mask'));
+            $('[data-dgd-mask]', obj).each(function () {
+                $(this).mask($(this).attr('data-dgd-mask'));
             });
         } else {
-            $('[data-fmk-mask]').each(function () {
-                $(this).mask($(this).attr('data-fmk-mask'));
+            $('[data-dgd-mask]').each(function () {
+                $(this).mask($(this).attr('data-dgd-mask'));
             });
         }
     },
@@ -325,9 +327,9 @@ var framework = window.framework = {
     ajaxSetup: function () {
         setTimeout(function () {
             $(document).ajaxStart(function (a) {
-                framework.blockUi();
+                digdin.blockUi();
             }).ajaxComplete(function (a) {
-                framework.unblockUi();
+                digdin.unblockUi();
             });
 
         }, 400);
@@ -338,13 +340,31 @@ var framework = window.framework = {
     },
 
     blockUi: function () {
-        var blockUi = $(framework.templates.blockUi).hide();
+        var blockUi = $(digdin.templates.blockUi).hide();
         $('body').append(blockUi);
         blockUi.show();
     },
 
     addAction: function(name, func) {
-        framework.actions[name] = func;
+        digdin.actions[name] = func;
+    },
+
+    proccessTemplate: function(template){
+        var keysJs = (template + '').match(/{{[\s\S]*}}/gi);
+
+
+
+
+        for (var key = 0; key <= (keysJs.length -1) ;key++) {
+            var str = keysJs[key];
+            var ev = (str).replace('{{', '').replace('}}', '');
+            var ret = eval(ev)
+            template = template.replace(str, ret + '');
+        }; 
+
+
+
+        return template;
     },
     
     addValueToTemplate: function (data, template) {
@@ -363,14 +383,15 @@ var framework = window.framework = {
 
                 }
             }
-            return template;
+
+            return digdin.proccessTemplate(template);
         } else {
             return "";
         }
     },
 
     getJson: function (obj) {
-        var fmkName = '[data-fmk-name]';
+        var fmkName = '[data-dgd-name]';
         var fields = obj.find(fmkName);
         var ret = {};
         fields.each(function () {

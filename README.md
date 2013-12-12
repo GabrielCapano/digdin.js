@@ -6,6 +6,11 @@ A Javascript framework for ui development
 
 digdin.js is based on knockout.js and angular.js it's a simplified framework that is very easy extensionable.
 
+Examples
+========
+
+- (Example 1)[http://gypsolutions.com.br/digdin/examples/]
+
 Why use digdin.js?
 ==================
 Because it's simplicity and the bundle of jQuery plugins that come with, it'll ease your life with web app development!
